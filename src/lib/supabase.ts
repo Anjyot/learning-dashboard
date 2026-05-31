@@ -1,22 +1,21 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  'https://placeholder.supabase.co';
 
-function createSupabaseClient(): SupabaseClient {
-  if (!supabaseUrl || !supabaseAnonKey) {
-    // Return a client with empty strings - will fail gracefully on actual queries
-    // This allows the app to run with mock data when Supabase is not configured
-    return createClient(
-      'https://placeholder.supabase.co',
-      'placeholder-key'
-    );
-  }
-  return createClient(supabaseUrl, supabaseAnonKey);
-}
+const supabaseAnonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  'placeholder-key';
 
-export const supabase = createSupabaseClient();
+export const supabase: SupabaseClient = createClient(
+  supabaseUrl,
+  supabaseAnonKey
+);
 
 export function isSupabaseConfigured(): boolean {
-  return Boolean(supabaseUrl) && Boolean(supabaseAnonKey);
+  return Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
 }
